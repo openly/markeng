@@ -11,13 +11,15 @@ var ComponentResources = function(){
 
   this.addStyleSheets = function(sheets, dir){
     _.each(sheets,function(sheet){
-      cssResources.push('/static' + dir + '/' + sheet);
+      if(/\.css/.test(sheet))
+        cssResources.push('/static' + dir + '/' + sheet);
     })
   }
 
   this.addJavascript = function(scripts, dir){
     _.each(scripts,function(script){
-      jsResources.push('/static' + dir + '/' + script);
+      if(/\.js/.test(script))
+        jsResources.push('/static' + dir + '/' + script);
     })
   }
 

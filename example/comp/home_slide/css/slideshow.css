@@ -1,0 +1,36 @@
+.slideshow{
+    position: relative;
+    width: 1278px;
+    height: 400px;
+}
+.slide{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.slide.active{
+    z-index: 1;
+}
+
+ul.buttons{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+}
+ul.buttons li.button{
+    float: left;
+    margin: 3px;
+    width: 10px;
+    height: 10px;
+    background-color: #aaa;
+    cursor: pointer;
+}
+
+ul.buttons li.button.active{
+    background-color: #666;
+}
