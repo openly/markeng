@@ -1,4 +1,4 @@
-var ComponentController = require('../controllers/component');
+var ComponentController = require('../controllers/component')
   , PageController      = require('../controllers/page');
 
 var Router = {

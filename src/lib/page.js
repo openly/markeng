@@ -3,23 +3,24 @@ var fs = require('fs')
   , _ = require('underscore')
   , hogan = require('hogan.js')
   , ComponentResources = require('./resources/component')
+  , components = require('./components')
   , path = require('path')
   ;
 
-var Components = function(){
+var Page = function(){
   function readTemplate(name){
-    return fs.readFileSync(path.normalize(config.dir + '/comp/' + name + '/index.html')).toString();
+    return fs.readFileSync(path.normalize(config.dir + '/pages/' + name + '/index.html')).toString();
   }
 
-  this.renderComponent = function(name){
-    addComponentResources(name)
+  this.renderPage = function(name){
+    addPageResources(name)
     var template = hogan.compile(readTemplate(name));
-    return template.render(getComponents(name));
+    return template.render(getComponents(""));
   }
 
-  function addComponentResources(name){
-    var cssDir = '/comp/'+ name +'/css'
-      , jsDir = '/comp/'+ name +'/js';
+  function addPageResources(name){
+    var cssDir = '/pages/'+ name +'/css'
+      , jsDir = '/pages/'+ name +'/js';
     if(fs.existsSync(config.dir + cssDir)){
       ComponentResources.addStyleSheets(fs.readdirSync(path.normalize(config.dir + cssDir)), cssDir);
     }
@@ -29,18 +30,18 @@ var Components = function(){
   }
 
   function getComponents(name){
-    var dirs = fs.readdirSync(path.normalize(config.dir + '/comp'));
+    var dirs = fs.readdirSync(config.dir + '/comp');
     var obj = {};
     _.each(dirs, function(dir){
       obj[dir] = function(){
         if(dir == name)
           return "Circular reference not allowed.";
 
-        return theComponents.renderComponent(dir);
+        return components.renderComponent(dir);
       }
     });
     return obj;
   }
 }
 
-module.exports = theComponents = new Components();
+module.exports = new Page();
