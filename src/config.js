@@ -8,6 +8,14 @@ var Config = {
     var conf = this;
 
     conf.dir = program.dir || process.cwd();
+
+    if(!fs.existsSync(this.dir + '/markeng.json')){
+      console.log( "ERROR: Not a valid directory."+
+        " Please run the application inside a markeng Directory,"+
+        " or pass the directory through the command line switch -d" );
+      process.exit();
+    }
+
     var jsonCont = fs.readFileSync(this.dir + '/markeng.json');
     var config = JSON.parse(jsonCont);
     _.each(config,function(val,key){

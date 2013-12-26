@@ -1,7 +1,26 @@
 {
   "name": "markeng",
   "version": "0.0.1",
-  "private": true,
+  "description": "A tool to engineer forntend. Split the content to pages, components sub components. Then merge it together.",
+  "homePage": "http://markeng.openly.io",
+  "bugs":{
+    "url":"https://github.com/openly/markeng/issues",
+    "email": "abhi.h@openly.co"
+  },
+  "licence":{
+    "type":"MIT",
+    "url":"http://opensource.org/licenses/MIT"
+  },
+  "author":{
+    "name":"Abhilash Hebbar",
+    "email":"abhi.h@openly.co",
+    "url":"http://openly.co/abhi"
+  },
+  "repository":{
+    "type":"git",
+    "url": "https://github.com/openly/markeng.git"
+  },
+  "bin":{"markeng":"./server.js"},
   "scripts": {
     "start": "node src/app"
   },
