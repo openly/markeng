@@ -29,6 +29,8 @@
     "hogan.js": "*",
     "hogan-express": "*",
     "commander":"",
-    "underscore":""
+    "underscore":"",
+    "csso":"",
+    "uglify-js":""
   }
 }

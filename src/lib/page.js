@@ -13,20 +13,9 @@ var Page = function(){
   }
 
   this.renderPage = function(name){
-    addPageResources(name)
+    ComponentResources.addForPage(name)
     var template = hogan.compile(readTemplate(name));
     return template.render(getComponents(""));
-  }
-
-  function addPageResources(name){
-    var cssDir = '/pages/'+ name +'/css'
-      , jsDir = '/pages/'+ name +'/js';
-    if(fs.existsSync(config.dir + cssDir)){
-      ComponentResources.addStyleSheets(fs.readdirSync(path.normalize(config.dir + cssDir)), cssDir);
-    }
-    if(fs.existsSync(config.dir + jsDir)){
-      ComponentResources.addJavascript(fs.readdirSync(path.normalize(config.dir + jsDir)), jsDir);
-    }
   }
 
   function getComponents(name){

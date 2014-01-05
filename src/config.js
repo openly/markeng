@@ -8,6 +8,8 @@ var Config = {
     var conf = this;
 
     conf.dir = program.dir || process.cwd();
+    conf.outputDir = program.output || (conf.dir + '/build');
+    conf.build_tool = program.tool || 'static';
 
     if(!fs.existsSync(this.dir + '/markeng.json')){
       console.log( "ERROR: Not a valid directory."+

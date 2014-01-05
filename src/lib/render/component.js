@@ -19,12 +19,12 @@ var ComponentRenderEngine = function(componentName){
   }
 
   function getRequiredStylesheets(){
-    var styles = _.union(GlobalResources.getStyleSheets(), ComponentResources.getStyleSheets())
+    var styles = _uniq(_.union(GlobalResources.getStyleSheets(), ComponentResources.getStyleSheets()))
     return ResourceRender.renderCSS(styles);
   }
 
   function getRequiredScripts(){
-    var scripts = _.union(GlobalResources.getJavascript(), ComponentResources.getJavascript())
+    var scripts = _.uniq(_.union(GlobalResources.getJavascript(), ComponentResources.getJavascript()))
     return ResourceRender.renderJS(scripts);
   }
 

@@ -30,10 +30,10 @@ Markeng works with a specific directory structure. Create the following director
             * component1.js
 * pages *
     * page1
-        * index.html
+        * index.html *
         * css
             * page1.css
         * js
             * page1.js
-* markeng.json
+* markeng.json *
 
