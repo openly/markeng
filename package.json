@@ -1,6 +1,6 @@
 {
   "name": "markeng",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A tool to engineer forntend. Split the content to pages, components sub components. Then merge it together.",
   "homePage": "http://markeng.openly.io",
   "bugs":{
@@ -20,7 +20,7 @@
     "type":"git",
     "url": "https://github.com/openly/markeng.git"
   },
-  "bin":{"markeng":"./server.js"},
+  "bin":{"markeng":"./start.js"},
   "scripts": {
     "start": "node src/app"
   },
@@ -31,6 +31,8 @@
     "commander":"",
     "underscore":"",
     "csso":"",
-    "uglify-js":""
+    "uglify-js":"",
+    "MD5":"",
+    "fs.extra":""
   }
 }

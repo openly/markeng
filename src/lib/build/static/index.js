@@ -1,11 +1,13 @@
 var path = require('path')
-  , fs = require('fs')
+  , FSManager = require('../../fs_manager')
   , resourceBuilder = require('./resource')
   , pageBuilder = require('./page')
+  , md5 = require('MD5')
   ;
 
 function MarkupBuilder(){
-  var buildDir;
+  var buildDir
+    , buildStaticVersion = md5((new Date()).toISOString());
 
   this.build = function(opDir){
     this.createBuildDir(opDir);
@@ -14,30 +16,19 @@ function MarkupBuilder(){
   }
 
   this.createBuildDir = function(opDir){
-    var folderName = (new Date()).toISOString();
-    createRecursiveDirs(opDir, '/static/' + folderName);
-    buildDir = path.normalize(opDir + '/static/' + folderName);
+    FSManager.rmrf(opDir, '/static/');
+    FSManager.createRecursiveDirs(opDir, '/static/');
+    buildDir = path.normalize(opDir + '/static/');
   }
 
   this.buildAssets = function(){
-    return resourceBuilder.build(buildDir);
+    return resourceBuilder.build(buildDir, buildStaticVersion);
   }
 
   this.buildPages = function(assets){
     pageBuilder.build(assets, buildDir);
   }
 
-  function createRecursiveDirs(basePath, dirPath){
-    var splitDirs = dirPath.split(/\//)
-      , nextDir = path.normalize(basePath + '/' + splitDirs.shift());
-    
-    if(!fs.existsSync(nextDir)){
-      fs.mkdirSync(nextDir);
-    }
-
-    if(splitDirs.length >= 1)
-      createRecursiveDirs(nextDir, splitDirs.join('/'));
-  }
 }
 
 module.exports = MarkupBuilder;

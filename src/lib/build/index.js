@@ -14,7 +14,7 @@ function Builder() {
     }
     var theBuildTool = new BuildTool;
 
-    theBuildTool.build(config.outputDir);
+    theBuildTool.build(config.build_dir);
   }
 
   function moduleExists(name){
@@ -26,4 +26,5 @@ function Builder() {
     }
   }
 }
+
 module.exports = new Builder();

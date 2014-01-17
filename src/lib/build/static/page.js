@@ -1,42 +1,41 @@
-var Util = require('../../util')
-  , config = require('../../../config')
+var MarkengPage = require('../../page')
   , _ = require('underscore')
-  , fs = require('fs')
+  , config = require('../../../config')
   , hogan = require('hogan.js')
-  , pageRender = require('../../page')
-  , ResourceRender = require('../../resources/render')
+  , fs = require('fs')
+  , StaticComponent = require('./component')
+  , Assets = require('../../assets')
+  , FSManager = require('../../fs_manager')
 ;
-var PageBuilder = function(){
-  var assets, buildDir;
-  this.build = function(theAssets, theBuildDir){
-    assets = theAssets;
-    buildDir = theBuildDir;
+var PageBuilder = {};
+PageBuilder.build = function(assets, dir){
+  _.each(MarkengPage.all(), function(page){
+    new StaticPage(page).build(assets, dir);
+  });
+}
 
-    var pages = Util.getAllPageNames();
-    _.each(pages, createPage)
-  }
+function StaticPage(markengPage){
+  this.build = function(assets, dir){
+    var fileName = ((config.home_page == markengPage.name) ? 'index.html': (markengPage.name + '.html'));
+    var pageTemplate = hogan.compile(markengPage.getTemplate());
+    var fullTemplate = hogan.compile(fs.readFileSync(__dirname + '/../../../../views/page.html').toString());
 
-  function createPage(pageName){
-    var fileName = (config.home_page == pageName) ? 'index.html' : (pageName + '.html');
-    console.log('Creating "' + fileName + '" for page "' + pageName + '".');
+    var pageContents = pageTemplate.render(
+      _.extend(
+        {root_dir: '/',page_dir:'/'},
+        StaticComponent.allAsFunction()
+      )
+    );
 
-    var template = hogan.compile(fs.readFileSync(__dirname + '/../../../../views/page.html').toString());
-    var pageCont = template.render({
-      "stylesheets" : ResourceRender.renderCSS(assets.css), // execute functions later :)
-      "scripts"     : ResourceRender.renderJS(assets.js),
-      "title"       : getTitle(pageName),
-      "main"        : getPageMarkup(pageName)
+    var fullContents = fullTemplate.render({
+      title:  config.title + " :: " + markengPage.name,
+      stylesheets: Assets.renderCSS(assets.css, true),
+      scripts: Assets.renderJS(assets.js, true),
+      main: pageContents
     });
-    fs.writeFileSync(buildDir + '/' + fileName, pageCont);
-  }
 
-  function getTitle(pageName){
-    return config.title + " :: " + pageName;
-  }
-
-  function getPageMarkup(pageName){
-    return pageRender.renderPage(pageName);
+    FSManager.writeFile(dir + '/' + fileName, fullContents);
   }
 }
 
-module.exports = new PageBuilder;
+module.exports = PageBuilder;

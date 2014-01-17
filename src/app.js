@@ -24,6 +24,7 @@ if(program.build){
 
   router.route(app);
 
-  console.log("Listening to " + (program.port || 3000))
+  console.log("\nMarkeng running.\nDirectory: " + config.dir + 
+                                "\nPort:      " + (program.port || 3000));
   app.listen(program.port || 3000);
 }

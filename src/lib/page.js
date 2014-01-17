@@ -1,36 +1,65 @@
-var fs = require('fs')
-  , config = require('../config')
+var config = require('../config')
   , _ = require('underscore')
-  , hogan = require('hogan.js')
-  , ComponentResources = require('./resources/component')
-  , components = require('./components')
-  , path = require('path')
+  , FSManager = require('./fs_manager')
+  , MarkengComponent = require('./component')
+  , PageRenderable = require('./renderable/page')
   ;
 
-var Page = function(){
-  function readTemplate(name){
-    return fs.readFileSync(path.normalize(config.dir + '/pages/' + name + '/index.html')).toString();
-  }
-
-  this.renderPage = function(name){
-    ComponentResources.addForPage(name)
-    var template = hogan.compile(readTemplate(name));
-    return template.render(getComponents(""));
-  }
-
-  function getComponents(name){
-    var dirs = fs.readdirSync(config.dir + '/comp');
-    var obj = {};
-    _.each(dirs, function(dir){
-      obj[dir] = function(){
-        if(dir == name)
-          return "Circular reference not allowed.";
-
-        return components.renderComponent(dir);
-      }
-    });
-    return obj;
+var MarkengPageManager = {
+  current: null,
+  get: function(name){
+    MarkengPageManager.current = name;
+    return new MarkengPage(name);
+  },
+  all: function(){
+    var pageNames = FSManager.getDirContents('pages');
+    return _.map(pageNames, this.get);
+  },
+  allNames: function(){
+    return FSManager.getDirContents('pages');
   }
 }
 
-module.exports = new Page();
+function MarkengPage(name){
+  var pageDir = '/pages/' + name + '/'
+    , page = this
+    , renderable
+    ;
+
+  this.name = name;
+  this.dir = pageDir;
+
+  this.getPageJS = function(){ 
+    return pagePathFor(FSManager.getDirContents(pageDir + 'js/', /\.js$/i), 'js/');
+  }
+  this.getPageCSS = function(){ 
+    return pagePathFor(FSManager.getDirContents(pageDir + 'css/', /\.css$/i), 'css/');
+  }
+  this.getOtherAssets = function(){ return FSManager.getDirContentsRecursive(pageDir,null,['css','js',/\.html?$/]); }
+  this.getTemplate = function(){ return FSManager.readFile(pageDir + 'index.html'); }
+  this.pageRelDir = function(){ return pageDir; }
+  this.getReferedComps = function(){ return MarkengComponent.currentObjs; }
+  this.getRenderable = function(){ 
+    if(typeof renderable == 'undefined')
+      renderable =  new PageRenderable(this);
+    return renderable; 
+  }
+
+  function pagePathFor(items, subdir){
+    if(_.isString(items)) return pageDir + subdir + items;
+    if(_.isArray(items)){
+      return _.map(items, function(item){ return pageDir + subdir + item; })
+    }
+    else{
+      var retval = {};
+      _.map(items, function(item, name){
+        var newName = pageDir + subdir + name;
+        retval[newName] = item;
+      })
+      return retval;
+    }
+  }
+}
+
+
+module.exports = MarkengPageManager;

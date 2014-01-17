@@ -1,0 +1,16 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>Markeng :: Pages List</title>
+    </head>
+    <body>
+        <h1>Markeng Pages</h1>
+        <nav>
+            <ul>
+                {{#pages}}
+                <li><a href="/p/{{.}}">{{.}}</a></li>
+                {{/pages}}
+            </ul>
+        </nav>
+    </body>
+</html>

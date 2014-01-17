@@ -1,17 +1,14 @@
-var ComponentController = require('../controllers/component')
-  , PageController      = require('../controllers/page');
+var pageController = require('../controller/page')
+  , compController = require('../controller/component')
 
 var Router = {
-  route: function(app) {
-    app.get('/comp/:name',        ComponentController.render    );
-    app.get('/comp/:name/:theme', ComponentController.render    );
-    app.get('/',                  PageController.renderHome     );
-    app.get('/pages',             PageController.list           );
-    app.get('/components',        ComponentController.list      );
-    app.get('/',                  PageController.redirectToHome );
-    app.get('/p/:name',           PageController.render         );
-    app.get('/p/:name/:theme',    PageController.render         );
-  }
+    route: function(app){
+        app.get('/', pageController.redirectToHome);
+        app.get('/p/:name', pageController.showPage);
+        app.get('/pages', pageController.list);
+        app.get('/comp/:name', compController.showComponent);
+        app.get('/comps', compController.list);
+    }
 }
 
 module.exports = Router;
