@@ -6,6 +6,7 @@ var MarkengPage = require('../../page')
   , StaticComponent = require('./component')
   , Assets = require('../../assets')
   , FSManager = require('../../fs_manager')
+  , customHead = require('../../custom_head')
 ;
 var PageBuilder = {};
 PageBuilder.build = function(assets, dir){
@@ -31,6 +32,7 @@ function StaticPage(markengPage){
       title:  config.title + " :: " + markengPage.name,
       stylesheets: Assets.renderCSS(assets.css, true),
       scripts: Assets.renderJS(assets.js, true),
+      custom_head: customHead.get(),
       main: pageContents
     });
 
