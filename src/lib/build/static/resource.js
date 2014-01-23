@@ -105,8 +105,10 @@ function combineAndMinifyCSS(files, dir, version){
   _.each(files, function(file){
     css += FSManager.readFile(file) + "\n";
   });
+  FSManager.writeFile(combinedFile, css);
 
   css = csso.justDoIt(css);
+  FSManager.writeFile(combinedFile, css);
   css = csso.justDoIt(css); // Two pass
 
   FSManager.writeFile(combinedFile, css);

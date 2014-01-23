@@ -44,6 +44,9 @@ var FSManager = {
       FSManager.createRecursiveDirs(nextDir, splitDirs.join('/'));
   },
 
+  exists: function(file){
+    return fs.existsSync(path.normalize(config.dir + '/' + file));
+  },
   readFile: function(file){
     return fs.readFileSync(path.normalize(config.dir + '/' + file)).toString();
   },

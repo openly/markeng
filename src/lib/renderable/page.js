@@ -4,6 +4,7 @@ var config = require('../../config')
   , Assets = require('../assets')
   , MarkengComponent = require('../component')
   , path = require('path')
+  , customHead = require('../custom_head')
   ;
 
 var PageRenderable = function (page) {
@@ -28,6 +29,7 @@ var PageRenderable = function (page) {
   // Variables for rendering
   this.title = config.title + " :: " + page.name;
   this.main = getMain();
+  this.custom_head = customHead.get();
 
   function getMain(){
     MarkengComponent.reset();
