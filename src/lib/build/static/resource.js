@@ -96,7 +96,7 @@ function combineAndMinifyJS(files, dir, version, dirnames){
 
   var res = UglifyJS.minify(combinedFile);
   FSManager.writeFile(combinedFile, res.code);
-  return combinedFileName;
+  return combinedMinFileName;
 }
 
 function combineAndMinifyCSS(files, dir, version, dirnames){
@@ -121,7 +121,7 @@ function combineAndMinifyCSS(files, dir, version, dirnames){
   css = csso.justDoIt(css); // Two pass
   FSManager.writeFile(combinedMinFile, css);
 
-  return combinedFileName;
+  return combinedMinFileName;
 
 }
 
