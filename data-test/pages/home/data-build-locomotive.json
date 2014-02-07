@@ -1,0 +1,5 @@
+{
+    "data":{
+        "heading": "{% editable_text %} Heading {% endeditable_text %}"
+    }
+}

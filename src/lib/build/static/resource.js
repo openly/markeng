@@ -12,20 +12,20 @@ var MarkengComponent = require('../../component')
 
 var ResourceBuilder={};
 
-ResourceBuilder.build = function(dir, version) {
+ResourceBuilder.build = function(dir, version, dirnames) {
   buildDir = dir;
   var allComps = MarkengComponent.all()
   , allPages = MarkengPage.all();
 
-  var builtCss = ResourceBuilder.buildCss(allComps, allPages, dir, version);
-  var builtJs = ResourceBuilder.buildJs(allComps, allPages, dir, version);
+  var builtCss = ResourceBuilder.buildCss(allComps, allPages, dir, version, dirnames);
+  var builtJs = ResourceBuilder.buildJs(allComps, allPages, dir, version, dirnames);
   ResourceBuilder.buildOtherAssets(allComps, allPages, dir, version);
 
   return {css: builtCss, js: builtJs}
 
 }
 
-ResourceBuilder.buildCss = function(comps, pages, dir, version){
+ResourceBuilder.buildCss = function(comps, pages, dir, version, dirnames){
   var compCss = _.flatten(_.map(comps, function(comp){ 
     return comp.getComponentCSS();
   }));
@@ -39,14 +39,14 @@ ResourceBuilder.buildCss = function(comps, pages, dir, version){
   var localCss = util.removeExternal(allCss);
   var externalCss = util.removeInternal(allCss);
 
-  var combined = combineAndMinifyCSS(localCss, dir, version);
+  var combined = combineAndMinifyCSS(localCss, dir, version, dirnames);
 
   externalCss.push(combined);
 
   return externalCss;
 }
 
-ResourceBuilder.buildJs = function(comps, pages, dir, version){
+ResourceBuilder.buildJs = function(comps, pages, dir, version, dirnames){
   var compJs = _.flatten(_.map(comps, function(comp){ 
     return comp.getComponentJS();
   }));
@@ -60,7 +60,7 @@ ResourceBuilder.buildJs = function(comps, pages, dir, version){
   var localJs = util.removeExternal(allJs);
   var externalJs = util.removeInternal(allJs);
 
-  var combined = combineAndMinifyJS(localJs, dir, version);
+  var combined = combineAndMinifyJS(localJs, dir, version, dirnames);
 
   externalJs.push(combined);
 
@@ -79,14 +79,19 @@ ResourceBuilder.buildOtherAssets = function(comps, pages, dir, version){
   })
 }
 
-function combineAndMinifyJS(files, dir, version){
-  FSManager.createRecursiveDirs(dir, 'js');
+function combineAndMinifyJS(files, dir, version, dirnames){
+  var jsDirname = _.isObject(dirnames) ? dirnames.js : "js";
+  FSManager.createRecursiveDirs(dir, jsDirname);
 
-  var combinedFileName = 'js/main.v' + version + '.js';
+  var combinedFileName = jsDirname + '/main.v' + version + '.js';
+  var combinedMinFileName = jsDirname + '/main.v' + version + '.min.js';
   var combinedFile = path.normalize(dir + '/' + combinedFileName);
+  var combinedMinFile = path.normalize(dir + '/' + combinedMinFileName);
+
+  FSManager.append(combinedFile, "// Created by Markeng\n");
 
   _.each(files, function(file){
-    FSManager.append(combinedFile, FSManager.readFile(file) + ";\n");
+    FSManager.append(combinedFile, "\n/* Source: " + file + " */\n" + FSManager.readFile(file) + ";\n");
   });
 
   var res = UglifyJS.minify(combinedFile);
@@ -94,24 +99,27 @@ function combineAndMinifyJS(files, dir, version){
   return combinedFileName;
 }
 
-function combineAndMinifyCSS(files, dir, version){
-  FSManager.createRecursiveDirs(dir, 'css');
+function combineAndMinifyCSS(files, dir, version, dirnames){
+  var cssDirname = _.isObject(dirnames) ? dirnames.css : "css";
 
-  var combinedFileName = 'css/main.v' + version + '.css';
+  FSManager.createRecursiveDirs(dir, cssDirname);
+
+  var combinedFileName = cssDirname + '/main.v' + version + '.css';
+  var combinedMinFileName = cssDirname + '/main.v' + version + '.min.css';
   var combinedFile = path.normalize(dir + '/' + combinedFileName);
+  var combinedMinFile = path.normalize(dir + '/' + combinedMinFileName);
 
   var css = "";
 
   _.each(files, function(file){
-    css += FSManager.readFile(file) + "\n";
+    css += "/* Source: " + file + " */\n" + FSManager.readFile(file) + "\n";
   });
+  css = css.replace(/\/static/g,'..'); // Static assets. Reset them :)
   FSManager.writeFile(combinedFile, css);
 
   css = csso.justDoIt(css);
-  FSManager.writeFile(combinedFile, css);
   css = csso.justDoIt(css); // Two pass
-
-  FSManager.writeFile(combinedFile, css);
+  FSManager.writeFile(combinedMinFile, css);
 
   return combinedFileName;
 

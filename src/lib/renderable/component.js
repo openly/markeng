@@ -2,6 +2,7 @@ var config = require('../../config')
   , _ = require('underscore')
   , hogan = require('hogan.js')
   , Assets = require('../assets')
+  , MarkengRenderVars = require('../render_vars')
   , path = require('path')
   ;
 
@@ -30,7 +31,6 @@ var ComponentRenderable = function (component, callStack, isRootComp) {
   this.main = getMain();
 
   function getMain(){
-    if(isRootComp) MarkengComponent.reset();
     var template = hogan.compile(component.getTemplate());
 
     return template.render(_.extend(
@@ -39,7 +39,9 @@ var ComponentRenderable = function (component, callStack, isRootComp) {
           'page_dir': path.normalize('/static/pages/' + MarkengPage.current),
           'comp_dir': path.normalize('/static/' + component.componentRelDir())
         },
-        MarkengComponent.allAsFunction(callStack) 
+        MarkengComponent.allAsFunction(callStack),
+        MarkengRenderVars.get(MarkengPage.current, component.name),
+        {abhi:function(name){ return "Name: " + name; }}
     ));
   }
 }

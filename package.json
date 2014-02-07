@@ -1,6 +1,6 @@
 {
   "name": "markeng",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "A tool to engineer forntend. Split the content to pages, components sub components. Then merge it together.",
   "homePage": "http://markeng.openly.io",
   "bugs":{

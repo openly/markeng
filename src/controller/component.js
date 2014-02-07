@@ -3,8 +3,17 @@ var config = require('../config')
 ;
 
 var ComponentController = {
-    redirectToHome: function(req, res, next){ res.redirect('/p/' + config.home_page); },
-    showComponent: function(req, res, next){ res.render('component', MarkengComponent.get(req.params.name).getRenderable() ); },
+    showComponent: function(req, res, next){ 
+        if(req.query.ajax){
+            MarkengComponent.reset();
+            var renderable = MarkengComponent.get(req.params.name).getRenderable();
+            res.end( renderable.main + renderable.stylesheets() );
+        }
+        else{
+            MarkengComponent.reset();
+            res.render('component', MarkengComponent.get(req.params.name).getRenderable() ); 
+        }
+    },
     list: function(req, res, next){ res.render('componentlist', { comps: MarkengComponent.allNames() }); }
 }
 module.exports = ComponentController;

@@ -3,6 +3,7 @@ var config = require('../../config')
   , hogan = require('hogan.js')
   , Assets = require('../assets')
   , MarkengComponent = require('../component')
+  , MarkengRenderVars = require('../render_vars')
   , path = require('path')
   , customHead = require('../custom_head')
   ;
@@ -33,13 +34,15 @@ var PageRenderable = function (page) {
 
   function getMain(){
     MarkengComponent.reset();
+    
     var template = hogan.compile(page.getTemplate());
     return template.render(_.extend(
         {
           'root_dir': '/static/',
           'page_dir': '/static/' + page.pageRelDir() 
         }, 
-        MarkengComponent.allAsFunction() 
+        MarkengComponent.allAsFunction(),
+        MarkengRenderVars.get(page.name)
     ));
   }
 }
