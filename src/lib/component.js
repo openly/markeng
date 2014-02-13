@@ -72,6 +72,10 @@ var MarkengComponent = function(name, callStack){
     this.getComponentCSS = function(){ 
       return compPathFor(FSManager.getDirContents(compDir + 'css/', /\.css$/i), 'css/');
     }
+    this.getComponentLESS = function(){ 
+      lessFiles = compPathFor(FSManager.getDirContents(compDir + 'less/', /\.less$/i), 'less/');
+      return _.map(lessFiles, function(lessFile){ return '/compile-less' + lessFile.replace(/\.less$/i,'.css'); });
+    }
     this.getOtherAssets = function(){ return FSManager.getDirContentsRecursive(compDir,null,['css','js',/\.html?$/,/^data.*json$/]); }
     this.componentRelDir = function(){ return compDir; }
 

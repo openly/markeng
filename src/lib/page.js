@@ -35,6 +35,10 @@ function MarkengPage(name){
   this.getPageCSS = function(){ 
     return pagePathFor(FSManager.getDirContents(pageDir + 'css/', /\.css$/i), 'css/');
   }
+  this.getPageLESS = function(){ 
+    lessFiles = pagePathFor(FSManager.getDirContents(pageDir + 'less/', /\.less$/i), 'less/');
+    return _.map(lessFiles, function(lessFile){ return '/compile-less' + lessFile.replace(/\.less$/i,'.css'); });
+  }
   this.getOtherAssets = function(){ return FSManager.getDirContentsRecursive(pageDir,null,['css','js',/\.html?$/,/^data.*json$/]); }
   this.getTemplate = function(){ return FSManager.readFile(pageDir + 'index.html'); }
   this.pageRelDir = function(){ return pageDir; }

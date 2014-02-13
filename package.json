@@ -33,6 +33,7 @@
     "csso":"",
     "uglify-js":"",
     "MD5":"",
+    "less":"",
     "fs.extra":""
   }
 }

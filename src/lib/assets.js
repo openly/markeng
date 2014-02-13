@@ -10,6 +10,12 @@ var Assets = {
     });
     return _.union((config.externalCSS || []), global);
   },
+  globalLESS: function(){ 
+    var global = _.map(FSManager.getDirContents('less/',/\.less$/i),function(less){
+      return '/compile-less/less/' + less.replace(/\.less$/i,'.css');
+    });
+    return _.union((config.externalLESS || []), global);
+  },
   globalJS: function(){
     var global = _.map(FSManager.getDirContents('js/',/\.js$/i),function(js){
       return '/js/' + js;
@@ -37,8 +43,16 @@ var Assets = {
 
 function attachRelPath(items){
   return _.map(items, function(item){ 
-    return /^https?:\/\//.test(item) || /^\/\//.test(item) ? item : ('/static' + item);
+    return isExternal(item) || isGenerated(item)  ? item : ('/static' + item);
   });
+}
+
+function isExternal(item){
+  return /^https?:\/\//.test(item) || /^\/\//.test(item);
+}
+
+function isGenerated(item){
+  return /^\/compile-/.test(item);
 }
 
 module.exports = Assets;

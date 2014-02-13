@@ -15,7 +15,7 @@ var PageRenderable = function (page) {
       return comp.getComponentCSS();
     });
     compCSS = _.flatten(compCSS);
-    return Assets.renderCSS(_.union(stylesheets, compCSS));
+    return Assets.renderCSS(_.union(stylesheets, compCSS)) + getLessDependencies();
   }
 
   this.scripts = function(){
@@ -44,6 +44,15 @@ var PageRenderable = function (page) {
         MarkengComponent.allAsFunction(),
         MarkengRenderVars.get(page.name)
     ));
+  }
+
+  function getLessDependencies(){
+    var lessStylesheets = _.union( Assets.globalLESS(), page.getPageLESS() );
+    var compLESS = _.map(page.getReferedComps(), function(comp){
+      return comp.getComponentLESS();
+    });
+    compLESS = _.flatten(compLESS);
+    return Assets.renderCSS(_.union(lessStylesheets, compLESS)) 
   }
 }
 
