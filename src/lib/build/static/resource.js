@@ -95,7 +95,7 @@ function combineAndMinifyJS(files, dir, version, dirnames){
   });
 
   var res = UglifyJS.minify(combinedFile);
-  FSManager.writeFile(combinedFile, res.code);
+  FSManager.writeFile(combinedMinFile, res.code);
   return combinedMinFileName;
 }
 
