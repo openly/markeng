@@ -1,10 +1,10 @@
 {
-	"title": "Markup Eng example project.",
-	"home_page": "home",
+    "title": "Markup Eng example project.",
+    "home_page": "home",
     "externalJS":[
         "//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     ],
-	"bower_req": [
-		"jquery"
-	]
+    "bower_req": [
+        "jquery"
+    ]
 }

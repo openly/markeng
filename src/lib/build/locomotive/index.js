@@ -24,7 +24,7 @@ LocomotiveThemeBuilder = (function(_super) {
   LocomotiveThemeBuilder.prototype.createBuildDir = function(opDir) {
     FSManager.rmrf(opDir, '/locomotive/');
     FSManager.createRecursiveDirs(opDir, '/locomotive/public');
-    FSManager.createRecursiveDirs(opDir, '/locomotive/app/views');
+    FSManager.createRecursiveDirs(opDir, '/locomotive/app/views/pages');
     return this.buildDir = path.normalize(opDir + '/locomotive/public');
   };
 
@@ -36,7 +36,7 @@ LocomotiveThemeBuilder = (function(_super) {
   };
 
   LocomotiveThemeBuilder.prototype.buildPages = function(assets) {
-    return pageBuilder.build(assets, this.buildDir + '/../app/views');
+    return pageBuilder.build(assets, this.buildDir + '/../app/views/pages');
   };
 
   return LocomotiveThemeBuilder;

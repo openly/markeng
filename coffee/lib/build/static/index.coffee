@@ -9,17 +9,19 @@ class MarkupBuilder
     @buildStaticVersion = md5((new Date()).toISOString());
 
   build: (opDir)->
+    self = @
     @createBuildDir(opDir);
-    assets = @buildAssets();
-    @buildPages(assets);
+    @buildAssets((assets)->
+      self.buildPages(assets);
+    );
 
   createBuildDir: (opDir)->
     FSManager.rmrf(opDir, '/static/');
     FSManager.createRecursiveDirs(opDir, '/static/');
     @buildDir = path.normalize(opDir + '/static/');
 
-  buildAssets: ()->
-    resourceBuilder.build(@buildDir, @buildStaticVersion);
+  buildAssets: (cb)->
+    resourceBuilder.build(@buildDir, @buildStaticVersion, null, cb);
 
   buildPages: (assets)->
     pageBuilder.build(assets, this.buildDir);

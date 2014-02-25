@@ -11,10 +11,9 @@ var Assets = {
     return _.union((config.externalCSS || []), global);
   },
   globalLESS: function(){ 
-    var global = _.map(FSManager.getDirContents('less/',/\.less$/i),function(less){
+    return _.map(FSManager.getDirContents('less/',/\.less$/i),function(less){
       return '/compile-less/less/' + less.replace(/\.less$/i,'.css');
     });
-    return _.union((config.externalLESS || []), global);
   },
   globalJS: function(){
     var global = _.map(FSManager.getDirContents('js/',/\.js$/i),function(js){
@@ -23,7 +22,7 @@ var Assets = {
     return _.union((config.externalJS || []), global);
   },
   globalOtherAssets: function(){
-    return FSManager.getDirContentsRecursive('',null,['css','js', 'comp', 'pages','build', /\.json?$/]);
+    return FSManager.getDirContentsRecursive('',null,['css', 'js', 'less', 'tmp', 'comp', 'pages', 'build', /\.json?$/]);
   },
   renderJS: function(scripts, forBuild){
     if(!forBuild)

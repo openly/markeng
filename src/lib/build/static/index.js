@@ -17,10 +17,12 @@ MarkupBuilder = (function() {
   }
 
   MarkupBuilder.prototype.build = function(opDir) {
-    var assets;
+    var self;
+    self = this;
     this.createBuildDir(opDir);
-    assets = this.buildAssets();
-    return this.buildPages(assets);
+    return this.buildAssets(function(assets) {
+      return self.buildPages(assets);
+    });
   };
 
   MarkupBuilder.prototype.createBuildDir = function(opDir) {
@@ -29,8 +31,8 @@ MarkupBuilder = (function() {
     return this.buildDir = path.normalize(opDir + '/static/');
   };
 
-  MarkupBuilder.prototype.buildAssets = function() {
-    return resourceBuilder.build(this.buildDir, this.buildStaticVersion);
+  MarkupBuilder.prototype.buildAssets = function(cb) {
+    return resourceBuilder.build(this.buildDir, this.buildStaticVersion, null, cb);
   };
 
   MarkupBuilder.prototype.buildPages = function(assets) {
