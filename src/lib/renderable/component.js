@@ -15,7 +15,7 @@ var ComponentRenderable = function (component, callStack, isRootComp) {
       return comp.getComponentCSS();
     });
     compCSS = _.flatten(compCSS);
-    return Assets.renderCSS(_.union(Assets.globalCSS(), compCSS));
+    return Assets.renderCSS(_.union(Assets.globalCSS(), compCSS)) + getLessDependencies();
   }
 
   this.scripts = function(){
@@ -43,6 +43,15 @@ var ComponentRenderable = function (component, callStack, isRootComp) {
         MarkengRenderVars.get(MarkengPage.current, component.name),
         {abhi:function(name){ return "Name: " + name; }}
     ));
+  }
+
+  function getLessDependencies(){
+    var lessStylesheets = Assets.globalLESS();
+    var compLESS = _.map(MarkengComponent.currentObjs, function(comp){
+      return comp.getComponentLESS();
+    });
+    compLESS = _.flatten(compLESS);
+    return Assets.renderCSS(_.union(lessStylesheets, compLESS)) 
   }
 }
 

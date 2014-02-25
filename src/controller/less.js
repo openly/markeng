@@ -15,29 +15,37 @@ var LessCompileController = {
       paths: [path.dirname(config.dir + '/' + req.params.file)],
       filename: req.params.file.replace(/\.css?$/,'.less')
     });
-
+    process.on('uncaughtException', onError);
     parser.parse(lessCode, function (e, tree) {
+      process.removeListener('uncaughtException', onError);
       if(e){
-        res.end(
-          'body:before{'+
-            'content:"' + e.message + ' - in ' + e.filename + ' - Line: ' + e.line + '" ;' +
-            'position: fixed;' +
-            'bottom: 0;' +
-            'left: 0;' +
-            'width:100%;' +
-            'min-height: 30px;' +
-            'background-color: #faa;' +
-            'z-index: 10000;' +
-            'font-weight: bold;' +
-            'text-align: center;' +
-          '}'
-        );
+        onError(e)
         return;
       }
-      res.end(tree.toCSS({
-        compress: true
-      }));
+      try{
+        res.end(tree.toCSS({
+          compress: true
+        }));
+      } catch(e){ onError(e); }
     });
+
+    function onError(e) {
+      res.end(
+        'body:before{'+
+          'content:"' + e.message + ' - in ' + e.filename + ' - Line: ' + e.line + '" ;' +
+          'position: fixed;' +
+          'bottom: 0;' +
+          'left: 0;' +
+          'width:100%;' +
+          'min-height: 30px;' +
+          'background-color: #faa;' +
+          'z-index: 10000;' +
+          'font-weight: bold;' +
+          'text-align: center;' +
+        '}'
+      );
+    }
+
   }
 }
 module.exports = LessCompileController;
