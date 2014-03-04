@@ -31,7 +31,7 @@ var LessCompileController = {
 
     function onError(e) {
       res.end(
-        'body:before{'+
+        'body:before{' +
           'content:"' + e.message + ' - in ' + e.filename + ' - Line: ' + e.line + '" ;' +
           'position: fixed;' +
           'bottom: 0;' +
