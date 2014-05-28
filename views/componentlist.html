@@ -1,0 +1,16 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>Markeng :: Pages List</title>
+    </head>
+    <body>
+        <h1>Markeng Components</h1>
+        <nav>
+            <ul>
+                {{#comps}}
+                <li><a href="/comp/{{.}}">{{.}}</a></li>
+                {{/comps}}
+            </ul>
+        </nav>
+    </body>
+</html>
