@@ -1,0 +1,19 @@
+{% macro field(name, label, value='', type='text') %}
+<div class="field">
+  <label for="{{ name }}">{{ label }}</label>
+  <input type="{{ type }}" name="{{ name }}"
+         value="{{ value | escape }}" placeholder={{ label }} />
+</div>
+{% endmacro %}
+
+{% macro well(title='Some header',noParas=2,viewMore=false) %}
+<div class="well">
+  <h2>{{ title }}</h2>
+  {% for i in range(0, noParas) %}
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, debitis, corporis, aperiam dignissimos commodi inventore minima dolor a at labore iusto aliquid officia veniam aspernatur est eligendi atque. Possimus, vero.</p>
+  {% endfor %}
+  {% if viewMore %}
+  <a href="#">View More</a>
+  {% endif %}
+</div>
+{% endmacro %}

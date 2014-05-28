@@ -4,7 +4,11 @@
     "externalJS":[
         "//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     ],
+    "externalCSS":[
+        "//openly.co/css/normalize.css"
+    ],
+    "plugins": [ "livereload", "less","stylus" ],
     "bower_req": [
-        "jquery"
+        "jquery "
     ]
 }
