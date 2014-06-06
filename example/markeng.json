@@ -5,7 +5,7 @@
         "//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     ],
     "externalCSS":[
-        "//openly.co/css/normalize.css"
+       
     ],
     "plugins": [ "css" ],
     "bower_req": [
