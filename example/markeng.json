@@ -7,7 +7,7 @@
     "externalCSS":[
         "//openly.co/css/normalize.css"
     ],
-    "plugins": [  ],
+    "plugins": [ "stylus" ],
     "bower_req": [
         "jquery "
     ]
