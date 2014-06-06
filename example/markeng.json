@@ -4,10 +4,8 @@
     "externalJS":[
         "//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
     ],
-    "externalCSS":[
-        "//openly.co/css/normalize.css"
-    ],
-    "plugins": [ "stylus" ],
+    "externalCSS":[],
+    "plugins": [ ],
     "bower_req": [
         "jquery "
     ]
